@@ -33,34 +33,36 @@ function getWeekDay() {
 }
 
 function getCurrentHour() {
+    // Considerar os métodos abaixo para incluir zeros em numeros < 10
+    // padStart()
+    // slice()
+    // formatos de hora considerando o locale do usuário
     const date = new Date();
     return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
- 
-    }
-    // getHours()
-    // getMinutes()
-    // getSeconds()
-    // separados por ":"
-    // todos com dois dígitos (se menor que 10, 0 a esquerda)
-    // retorna hora:minuto:segundo
-
-function printCurrentHour() {
-    horaMinSeg.textContent = getCurrentHour();
-
 }
 
 
 function getCurrentDate() {
+    // Alterar a solução para considerar padStart ou slice
+    // Considerar formatos diferentes da data, conforme localização
+    // do usuário dd/mm/aaaa, mm/dd/aaaa, aaaa/mm/dd, aaaa.mm.dd
+    // Verificar se no Date() há algum método que possa auxiliar
+    // locale
     const date = new Date();
-    return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDate();
+    if (day < 10) {
+        day = "0" + day
+    }
+    if (month < 10) {
+        month = "0" + (month + 1)
+    }
+    return day + "/" + month + "/" + date.getFullYear();
 }
 
-setInterval
+function printCurrentHour() {
+    horaMinSeg.textContent = getCurrentHour();
+}
 
-//const date = new Date();
-//const options = {
-//    month: '2-digit',
-//    day: '2-digit',
-//    year: 'numeric'
-//};
-//    return date.toLocaleDateString();
+
+setInterval(printCurrentHour, 1000);
