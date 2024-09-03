@@ -2,6 +2,12 @@ const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
 
+const btnBaterPonto = document.getElementById("btn-bater-ponto");
+//btnBaterPonto.addEventListener("click", register);
+
+const dialogPonto = document.getElementById("dialog-ponto");
+dialogPonto.showModal();
+
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
