@@ -3,13 +3,27 @@ const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
 
 const btnBaterPonto = document.getElementById("btn-bater-ponto");
-//btnBaterPonto.addEventListener("click", register);
+btnBaterPonto.addEventListener("click", register);
 
 const dialogPonto = document.getElementById("dialog-ponto");
-dialogPonto.showModal();
+
+const btnDialogFechar = document.getElementById("btn-dialog-fechar");
+btnDialogFechar.addEventListener("click", () => {
+    dialogPonto.close();
+});
+
+const dialogData = document.getElementById("dialog-data");
+dialogData.textContent = "Data: " + getCurrentDate();
+
+const dialogHora = document.getElementById("dialog-hora");
+dialogHora.textContent = "Hora: " + getCurrentHour();
 
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
+
+function register() {
+    dialogPonto.showModal();
+}
 
 
 function getWeekDay() {

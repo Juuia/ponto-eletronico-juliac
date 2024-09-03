@@ -4,7 +4,6 @@
 
 .fechar-btn {
     position: absolute;
-    top:20%;
-    left:86%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    right: 0;
 }
