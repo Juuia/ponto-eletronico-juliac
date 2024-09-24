@@ -1,9 +1,114 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    font-family: 'Montserrat', sans-serif;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdf2f8;
+    color: #c96698;
+}
+
 .data-hora {
+    text-align: center;
+    font-size: 35px;
+    font-family: 'Montserrat', sans-serif;
+    color: #f28e9b;
+}
+
+#btn-dialog-bater-ponto {
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f6c3d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+#btn-bater-ponto {
+    font-size: 25px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f6c3d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+#div-btn-bater-ponto {
     text-align: center;
 }
 
-.fechar-btn {
+.data-hora, 
+#alerta-registro-ponto, 
+#div-btn-bater-ponto,
+dialog {
+    text-align: center; /* Centraliza o texto dos elementos */
+}
+
+#btn-bater-ponto:hover {
+    background-color: #e6b0c7;
+}
+
+#alerta-registro-ponto {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffe6f2;
+    color: #4a4a4a;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 2px solid #f28e9b;
+}
+
+#div-tipos-ponto {
+    font-size: 19px;
+    margin-top: 20px;
+}
+
+#dialog-ponto {
+    font-size: 18px;
+    border: 2px solid #f28e9b;
+    border-radius: 10px;
+}
+
+#btn-dialog-fechar {
+    border: 2px solid #f28e9b;
+    border-radius: 5px;
+    color: #c96698;
+    background-color: #fcf6f9;
+}
+
+select {
+    padding: 10px;
+    border: 2px solid #f6c3d4;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 15px;
+}
+
+#btn-dialog-fechar {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+/* TO-DO: */
+
+.hidden {
+    opacity: 0;
+}
+
+.show {
+    opacity: 1;
 }
