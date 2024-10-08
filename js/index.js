@@ -137,10 +137,10 @@ function getCurrentDate() {
     if (day < 10) {
         day = "0" + day
     }
-    if (month < 10) {
+    if (month < 9) {
         month = "0" + (month + 1)
     }
-    return day + "/" + month + "/" + date.getFullYear();
+    return day + "/" + (month + 1)  + "/" + date.getFullYear();
 }
 
 function printCurrentHour() {
