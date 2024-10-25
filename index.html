@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Controle de Ponto</title>
     <link rel="stylesheet" href="css/style.css">
-   <!-- Conexões para fontes -->
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   
-   <!-- Fontes -->
-   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="alerta-registro-ponto" class="hidden">
@@ -25,24 +22,24 @@
     <div id="div-btn-bater-ponto">
         <button id="btn-bater-ponto">Bater ponto!</button>
     </div>
+    <div id="div-btn-view-report">
+        <button id="btn-view-report">Ver Relatório</button>
+    </div>
     <dialog id="dialog-ponto">
-        <!-- TO-DO: -->
-        <!-- Quais outras informações relevantes podemos mostrar para o usuário? -->
         <p id="dialog-data"></p>
         <p id="dialog-hora"></p>
-            <select name="tipos-ponto" id="tipos-ponto">
-                <option value="entrada">Entrada</option>
-                <option value="intervalo">Intervalo</option>
-                <option value="volta-intervalo">Volta Intervalo</option>
-                <option value="saida">Saída</option>
-            </select>
-            <button id="btn-dialog-bater-ponto">Registrar ponto</button>
-            <p id="dialog-last-register"></p>
-            <button id="btn-dialog-fechar">X</button>
+        <input type="date" id="calendar">
+        <div id="hora-container"></div>
+        <select name="tipos-ponto" id="tipos-ponto">
+            <option value="entrada">Entrada</option>
+            <option value="intervalo">Intervalo</option>
+            <option value="volta-intervalo">Volta Intervalo</option>
+            <option value="saida">Saída</option>
+        </select>
+        <button id="btn-dialog-bater-ponto">Registrar ponto</button>
+        <p id="dialog-last-register"></p>
+        <button id="btn-dialog-fechar">X</button>
     </dialog>
-    <!-- TO-DO: -->
-    <!-- criar histórico dos últimos n registros-->
-    <!-- criar footer para alerta -->
     <script src="js/index.js"></script>
 </body>
 </html>
