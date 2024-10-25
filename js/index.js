@@ -1,117 +1,106 @@
-// TO-DO:
-// Organizar código-fonte,
-
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
-
 const btnBaterPonto = document.getElementById("btn-bater-ponto");
-btnBaterPonto.addEventListener("click", register);
-
 const dialogPonto = document.getElementById("dialog-ponto");
-
 const btnDialogFechar = document.getElementById("btn-dialog-fechar");
+const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
+
+let registerLocalStorage = getRegisterLocalStorage();
+let lastRegister = {};
+
+// Atualiza as informações de data e hora na página
+diaSemana.textContent = getWeekDay();
+diaMesAno.textContent = getCurrentDate();
+
+btnBaterPonto.addEventListener("click", register);
 btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
+// Função para registrar ponto
+function register() {
+    const dialogData = document.getElementById("dialog-data");
+    const dialogHora = document.getElementById("dialog-hora");
 
-let registerLocalStorage = getRegisterLocalStorage();
+    dialogData.textContent = "Data: " + getCurrentDate();
+    dialogHora.textContent = "Hora: " + getCurrentHour();
 
-const dialogData = document.getElementById("dialog-data");
-const dialogHora = document.getElementById("dialog-hora");
+    let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister");
+    document.getElementById("dialog-last-register").textContent = lastRegisterText;
 
-const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
+    const horaInput = document.createElement("input");
+    horaInput.type = "time";
+    horaInput.id = "hora-input";
+    horaInput.value = getCurrentHour(); // Define a hora atual como padrão
 
+    const horaContainer = document.getElementById("hora-container"); // Um contêiner onde o campo de hora será adicionado
+    horaContainer.innerHTML = ""; // Limpa o conteúdo anterior
+    horaContainer.appendChild(horaInput); // Adiciona o campo de hora ao contêiner
 
+    dialogPonto.showModal();
+}
 
-diaSemana.textContent = getWeekDay();
-diaMesAno.textContent = getCurrentDate();
+const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
+btnDialogBaterPonto.addEventListener("click", () => {
+    let typeRegister = document.getElementById("tipos-ponto").value;
+    let selectedDate = document.getElementById("calendar").value;
+    let currentDate = getCurrentDate();
 
+    if (!selectedDate) {
+        selectedDate = getCurrentDateFormatted();
+    }
 
-// TO-DO:
-// Por que esta função não retorna a localização?
-// [doc]
+    if (new Date(selectedDate) > new Date(currentDate)) {
+        alert("Não é permitido registrar ponto em data futura.");
+        return;
+    }
+
+    let pontoHora = document.getElementById("hora-input").value; // Obtém a hora do input
+
+    let ponto = {
+        "data": selectedDate,
+        "hora": pontoHora,
+        "localizacao": getCurrentPosition(),
+        "id": Date.now(),
+        "tipo": typeRegister
+    };
+
+    saveRegisterLocalStorage(ponto);
+    localStorage.setItem("lastTypeRegister", typeRegister);
+    localStorage.setItem("lastDateRegister", ponto.data);
+    localStorage.setItem("lastTimeRegister", ponto.hora);
+
+    dialogPonto.close();
+    divAlertaRegistroPonto.classList.remove("hidden");
+    divAlertaRegistroPonto.classList.add("show");
+
+    setTimeout(() => {
+        divAlertaRegistroPonto.classList.remove("show");
+        divAlertaRegistroPonto.classList.add("hidden");
+    }, 3000);
+});
+
+// Função para salvar o registro no localStorage
+function saveRegisterLocalStorage(register) {
+    registerLocalStorage.push(register);
+    localStorage.setItem("register", JSON.stringify(registerLocalStorage));
+}
+
+// Função para obter registros do localStorage
+function getRegisterLocalStorage() {
+    let registers = localStorage.getItem("register");
+    return registers ? JSON.parse(registers) : [];
+}
+
+// Função para obter a localização do usuário
 function getCurrentPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
         return position;
     });
 }
 
-
-const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
-btnDialogBaterPonto.addEventListener("click", () => {
-
-    let typeRegister = document.getElementById("tipos-ponto").value;
-
-    let ponto = {
-        "data": getCurrentDate(),
-        "hora": getCurrentHour(),
-        "localizacao": getCurrentPosition(),
-        "id": 1,
-        "tipo": typeRegister
-    }
-
-    console.log(ponto);
-
-    saveRegisterLocalStorage(ponto);
-
-    localStorage.setItem("lastTypeRegister", typeRegister);
-    localStorage.setItem("lastDateRegister", ponto.data);
-    localStorage.setItem("lastTimeRegister", ponto.hora);
-
-    dialogPonto.close();
-
-    divAlertaRegistroPonto.classList.remove("hidden");
-    divAlertaRegistroPonto.classList.add("show");
-
-    // Aguardar 3s e remover a classe show e adicionar a classe hidden
-
-
-    
-    // TO-DO:
-    // CRIAR UM ALERTA NO TOPO DA PÁGINA PRINCIPAL PARA CONFIRMAR O REGISTRO DE PONTO
-    // DEVE FICAR ABERTO POR 3 SEGUNDOS E DEVE TER UM EFEITO DE TRANSIÇÃO
-    // DEVE PODER SER FECHADO PELO USUÁRIO QUE NÃO QUISER AGUARDAR 3s
-    // DEVE MOSTRAR UMA MENSAGEM DE SUCESSO AO REGISTRAR O PONTO
-});
-
-
-function saveRegisterLocalStorage(register) {
-    registerLocalStorage.push(register); // Array
-    localStorage.setItem("register", JSON.stringify(registerLocalStorage));
-} 
-
-
-// Esta função deve retornar sempre um ARRAY, mesmo que seja vazio
-function getRegisterLocalStorage() {
-    let registers = localStorage.getItem("register");
-
-    if(!registers) {
-        return [];
-    }
-
-    return JSON.parse(registers); // converte de JSON para Array
-}
-
-
-
-
-
-// TO-DO:
-// alterar o nome da função
-function register() {
-    // TO-DO:
-    // Atualizar hora a cada segundo e data 00:00:00
-    dialogData.textContent = "Data: " + getCurrentDate();
-    dialogHora.textContent = "Hora: " + getCurrentHour();
-
-    let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
-    document.getElementById("dialog-last-register").textContent = lastRegisterText;
-
-    dialogPonto.showModal();
-}
-
+// Funções auxiliares
 function getWeekDay() {
     const date = new Date();
     let days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
@@ -123,30 +112,35 @@ function getCurrentHour() {
     return String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0') + ":" + String(date.getSeconds()).padStart(2, '0');
 }
 
-
 function getCurrentDate() {
-    // TO-DO:
-    // Alterar a solução para considerar padStart ou slice
-    // Considerar formatos diferentes da data, conforme localização
-    // do usuário dd/mm/aaaa, mm/dd/aaaa, aaaa/mm/dd, aaaa.mm.dd
-    // Verificar se no Date() há algum método que possa auxiliar
-    // locale
     const date = new Date();
     let month = date.getMonth();
     let day = date.getDate();
-    if (day < 10) {
-        day = "0" + day
-    }
-    if (month < 9) {
-        month = "0" + (month + 1)
-    }
-    return day + "/" + (month + 1)  + "/" + date.getFullYear();
+    if (day < 10) day = "0" + day;
+    if (month < 9) month = "0" + (month + 1);
+    return day + "/" + (month + 1) + "/" + date.getFullYear();
 }
 
+function getCurrentDateFormatted() {
+    const date = new Date();
+    let month = date.getMonth();
+    let day = date.getDate();
+    if (day < 10) day = "0" + day;
+    if (month < 9) month = "0" + (month + 1);
+    return `${date.getFullYear()}-${month + 1}-${day}`;
+}
+
+// Atualiza a hora a cada segundo
 function printCurrentHour() {
     horaMinSeg.textContent = getCurrentHour();
 }
 
-
 printCurrentHour();
 setInterval(printCurrentHour, 1000);
+
+// Função para abrir o relatório
+function openReport() {
+    window.open('relatorio.html', '_blank');
+}
+
+document.getElementById("btn-view-report").addEventListener("click", openReport);
