@@ -19,8 +19,9 @@ body {
     color: #f28e9b;
 }
 
-#btn-dialog-bater-ponto, #btn-bater-ponto {
-    font-size: 15px;
+#btn-dialog-bater-ponto, #btn-bater-ponto, #btn-view-report, #btn-voltar {
+    font-size: 20px;
+    margin: 5px;
     background-color: #f6c3d4;
     color: #fff;
     border: none;
@@ -28,6 +29,25 @@ body {
     border-radius: 15px; 
     cursor: pointer; 
     transition: background-color 0.3s; 
+}
+
+.btn-editar, .btn-excluir {
+    font-size: 13px;
+    margin: 5px;
+    background-color: #f6c3d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#calendar, #hora-input {
+ font-size: 15px;
+ border: 2px solid #e6b0c7;
+ border-radius: 5px;
+ margin: 3px;
+ font-family: 'Montserrat', sans-serif;
 }
 
 #div-btn-bater-ponto {
@@ -63,7 +83,7 @@ body {
 #btn-dialog-fechar {
     border: 2px solid #f28e9b;
     border-radius: 5px;
-    color: #c96698;
+    color: #e07eaf;
     background-color: #fcf6f9;
 }
 
