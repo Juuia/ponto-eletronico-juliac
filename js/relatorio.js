@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const registros = getRegisterLocalStorage();
 
     registros.forEach((registro, index) => {
+        console.log("Registro carregado:", registro); // Log para verificar o registro
+
         const divRegistro = document.createElement("div");
         divRegistro.classList.add("registro");
 
         const dataRegistro = new Date(registro.data);
-        const dataFormatada = `${dataRegistro.getDate().toString().padStart(2, '0')}/${(dataRegistro.getMonth() + 1).toString().padStart(2, '0')}/${dataRegistro.getFullYear()}`;
+        const dataFormatada = dataRegistro.toLocaleDateString('pt-BR'); // Formata a data no formato local
 
         divRegistro.innerHTML = `
             <p>${dataFormatada} - ${registro.hora} | Tipo: ${registro.tipo}</p>
@@ -28,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", (e) => {
             const index = e.target.dataset.index;
             const registro = registros[index];
+            console.log("Registro para edição:", registro); // Log para verificar o registro sendo editado
 
             const inputData = document.createElement("input");
             inputData.type = "date";
@@ -48,9 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const novaData = inputData.value;
                 const novaHora = document.getElementById("hora-input").value;
                 if (novaData && novaHora) {
-                    // Atualiza a data e a hora do registro
-                    const dataAtualizada = new Date(`${novaData}T${novaHora}`).toISOString();
-                    registro.data = dataAtualizada;
+                    registro.data = `${novaData}T${novaHora}`; // Atualiza a data e hora corretamente
+                    console.log("Registro atualizado:", registro); // Log para verificar o registro após a atualização
                     registro.hora = novaHora;
                     localStorage.setItem("register", JSON.stringify(registros));
                     window.location.reload();

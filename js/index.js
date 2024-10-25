@@ -9,7 +9,6 @@ const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
 let registerLocalStorage = getRegisterLocalStorage();
 let lastRegister = {};
 
-// Atualiza as informações de data e hora na página
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
@@ -18,7 +17,6 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
-// Função para registrar ponto
 function register() {
     const dialogData = document.getElementById("dialog-data");
     const dialogHora = document.getElementById("dialog-hora");
@@ -32,11 +30,11 @@ function register() {
     const horaInput = document.createElement("input");
     horaInput.type = "time";
     horaInput.id = "hora-input";
-    horaInput.value = getCurrentHour(); // Define a hora atual como padrão
+    horaInput.value = getCurrentHour();
 
-    const horaContainer = document.getElementById("hora-container"); // Um contêiner onde o campo de hora será adicionado
-    horaContainer.innerHTML = ""; // Limpa o conteúdo anterior
-    horaContainer.appendChild(horaInput); // Adiciona o campo de hora ao contêiner
+    const horaContainer = document.getElementById("hora-container");
+    horaContainer.innerHTML = "";
+    horaContainer.appendChild(horaInput);
 
     dialogPonto.showModal();
 }
@@ -45,18 +43,18 @@ const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 btnDialogBaterPonto.addEventListener("click", () => {
     let typeRegister = document.getElementById("tipos-ponto").value;
     let selectedDate = document.getElementById("calendar").value;
-    let currentDate = getCurrentDate();
+    let currentDate = getCurrentDateFormatted();
 
     if (!selectedDate) {
-        selectedDate = getCurrentDateFormatted();
+        selectedDate = currentDate;
     }
 
-    if (new Date(selectedDate) > new Date(currentDate)) {
+    if (new Date(selectedDate + "T00:00:00") > new Date(currentDate + "T00:00:00")) {
         alert("Não é permitido registrar ponto em data futura.");
         return;
     }
 
-    let pontoHora = document.getElementById("hora-input").value; // Obtém a hora do input
+    let pontoHora = document.getElementById("hora-input").value;
 
     let ponto = {
         "data": selectedDate,
@@ -81,26 +79,22 @@ btnDialogBaterPonto.addEventListener("click", () => {
     }, 3000);
 });
 
-// Função para salvar o registro no localStorage
 function saveRegisterLocalStorage(register) {
     registerLocalStorage.push(register);
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
 }
 
-// Função para obter registros do localStorage
 function getRegisterLocalStorage() {
     let registers = localStorage.getItem("register");
     return registers ? JSON.parse(registers) : [];
 }
 
-// Função para obter a localização do usuário
 function getCurrentPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
         return position;
     });
 }
 
-// Funções auxiliares
 function getWeekDay() {
     const date = new Date();
     let days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
@@ -114,11 +108,7 @@ function getCurrentHour() {
 
 function getCurrentDate() {
     const date = new Date();
-    let month = date.getMonth();
-    let day = date.getDate();
-    if (day < 10) day = "0" + day;
-    if (month < 9) month = "0" + (month + 1);
-    return day + "/" + (month + 1) + "/" + date.getFullYear();
+    return date.toLocaleDateString('pt-BR'); 
 }
 
 function getCurrentDateFormatted() {
@@ -130,7 +120,6 @@ function getCurrentDateFormatted() {
     return `${date.getFullYear()}-${month + 1}-${day}`;
 }
 
-// Atualiza a hora a cada segundo
 function printCurrentHour() {
     horaMinSeg.textContent = getCurrentHour();
 }
@@ -138,7 +127,6 @@ function printCurrentHour() {
 printCurrentHour();
 setInterval(printCurrentHour, 1000);
 
-// Função para abrir o relatório
 function openReport() {
     window.open('relatorio.html', '_blank');
 }
