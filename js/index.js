@@ -80,7 +80,13 @@ btnDialogBaterPonto.addEventListener("click", () => {
 });
 
 function saveRegisterLocalStorage(register) {
+    // Lê os registros existentes do localStorage
+    registerLocalStorage = getRegisterLocalStorage(); // Atualiza a lista de registros
+
+    // Adiciona o novo registro à lista existente
     registerLocalStorage.push(register);
+
+    // Salva a lista atualizada no localStorage
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
 }
 

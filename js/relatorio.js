@@ -2,22 +2,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const registrosContainer = document.getElementById("registros-container");
     const registros = getRegisterLocalStorage();
 
-    registros.forEach((registro, index) => {
-        console.log("Registro carregado:", registro); // Log para verificar o registro
+    // Agrupar registros por data
+    const registrosPorData = registros.reduce((acc, registro) => {
+        const data = registro.data.split("T")[0]; // Pega apenas a data sem o horário
+        if (!acc[data]) {
+            acc[data] = [];
+        }
+        acc[data].push(registro);
+        return acc;
+    }, {});
 
-        const divRegistro = document.createElement("div");
-        divRegistro.classList.add("registro");
+    // Exibir registros agrupados por data
+    Object.keys(registrosPorData).forEach(data => {
+        const divData = document.createElement("div");
+        divData.classList.add("data-registro");
+        
+        const dataFormatada = data.split("-").reverse().join("/"); // Formatação para exibição
+        divData.innerHTML = `<h2>${dataFormatada}</h2>`;
+        
+        registrosPorData[data].forEach((registro, index) => {
+            const divRegistro = document.createElement("div");
+            divRegistro.classList.add("registro");
 
-        const dataRegistro = new Date(registro.data);
-        const dataFormatada = dataRegistro.toLocaleDateString('pt-BR'); // Formata a data no formato local
+            divRegistro.innerHTML = `
+                <p>${registro.hora} | Tipo: ${registro.tipo}</p>
+                <button class="btn-editar" data-data="${data}" data-index="${index}">Editar</button>
+                <button class="btn-excluir" data-index="${index}">Excluir</button>
+            `;
 
-        divRegistro.innerHTML = `
-            <p>${dataFormatada} - ${registro.hora} | Tipo: ${registro.tipo}</p>
-            <button class="btn-editar" data-index="${index}">Editar</button>
-            <button class="btn-excluir" data-index="${index}">Excluir</button>
-        `;
+            divData.appendChild(divRegistro);
+        });
 
-        registrosContainer.appendChild(divRegistro);
+        registrosContainer.appendChild(divData);
     });
 
     const btnVoltar = document.getElementById("btn-voltar");
@@ -25,22 +41,21 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "index.html";
     });
 
+    // Lógica de edição
     const btnEditar = document.querySelectorAll(".btn-editar");
     btnEditar.forEach(btn => {
         btn.addEventListener("click", (e) => {
-            const index = e.target.dataset.index;
-            const registro = registros[index];
-            console.log("Registro para edição:", registro); // Log para verificar o registro sendo editado
+            const data = e.target.dataset.data; // Obtém a data do botão
+            const index = e.target.dataset.index; // Obtém o índice dentro do grupo
+            const registro = registrosPorData[data][index]; // Obtém o registro correto
 
-            const inputData = document.createElement("input");
-            inputData.type = "date";
-            inputData.value = new Date(registro.data).toISOString().split("T")[0];
+            console.log("Registro para edição:", registro);
 
             const dialog = document.createElement("dialog");
             dialog.innerHTML = `
                 <p>Editar horário do ponto:</p>
-                <p>Data: ${inputData.outerHTML}</p>
-                <input type="time" id="hora-input" value="${registro.hora}">
+                <label>Data: <input type="date" id="data-input" value="${registro.data.split("T")[0]}"></label>
+                <label>Hora: <input type="time" id="hora-input" value="${registro.hora}"></label>
                 <button id="btn-confirmar-edicao">Confirmar</button>
                 <button id="btn-cancelar-edicao">Cancelar</button>
             `;
@@ -48,13 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
             dialog.showModal();
 
             document.getElementById("btn-confirmar-edicao").addEventListener("click", () => {
-                const novaData = inputData.value;
+                const novaData = document.getElementById("data-input").value;
                 const novaHora = document.getElementById("hora-input").value;
+
                 if (novaData && novaHora) {
-                    registro.data = `${novaData}T${novaHora}`; // Atualiza a data e hora corretamente
-                    console.log("Registro atualizado:", registro); // Log para verificar o registro após a atualização
+                    registro.data = novaData;
                     registro.hora = novaHora;
+
+                    console.log("Registro atualizado:", registro);
+
+                    // Salva o registro atualizado no localStorage
                     localStorage.setItem("register", JSON.stringify(registros));
+                    
+                    // Atualiza a exibição na página
                     window.location.reload();
                 }
             });
