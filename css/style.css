@@ -16,25 +16,11 @@ body {
 .data-hora {
     text-align: center;
     font-size: 35px;
-    font-family: 'Montserrat', sans-serif;
     color: #f28e9b;
 }
 
-#btn-dialog-bater-ponto {
+#btn-dialog-bater-ponto, #btn-bater-ponto {
     font-size: 15px;
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f6c3d4;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 15px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-}
-
-#btn-bater-ponto {
-    font-size: 25px;
-    font-family: 'Montserrat', sans-serif;
     background-color: #f6c3d4;
     color: #fff;
     border: none;
@@ -48,11 +34,8 @@ body {
     text-align: center;
 }
 
-.data-hora, 
-#alerta-registro-ponto, 
-#div-btn-bater-ponto,
-dialog {
-    text-align: center; /* Centraliza o texto dos elementos */
+.data-hora, #alerta-registro-ponto, #div-btn-bater-ponto, dialog {
+    text-align: center; 
 }
 
 #btn-bater-ponto:hover {
@@ -69,11 +52,6 @@ dialog {
     text-align: center;
     padding: 10px;
     border-bottom: 2px solid #f28e9b;
-}
-
-#div-tipos-ponto {
-    font-size: 19px;
-    margin-top: 20px;
 }
 
 #dialog-ponto {
@@ -103,12 +81,21 @@ select {
     right: 0;
 }
 
-/* TO-DO: */
-
 .hidden {
     opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 .show {
     opacity: 1;
+    transition: opacity 0.5s ease;
+}
+#input-data-passada,
+#input-justificativa,
+#input-arquivo {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: 2px solid #f6c3d4;
+    border-radius: 10px;
 }
