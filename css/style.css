@@ -124,3 +124,79 @@ select {
     color: #e07eaf;
     font-weight: bold;
 }
+
+#arquivo-input {
+    background-color: #f6c3d4;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#arquivo-input:hover {
+    background-color: #ffe6f2;
+}
+
+#btn-confirmar-edicao {
+    background-color: #e07eaf;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+#btn-confirmar-edicao:hover {
+    background-color: #e07eaf;
+}
+
+#btn-cancelar-edicao {
+    background-color: #e07eaf;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#btn-cancelar-edicao:hover {
+    background-color: #f6c3d4;
+}
+
+#btn-filtrar {
+    background-color: #f6c3d4;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+#btn-filtrar:hover {
+    background-color: #f6c3d4;
+}
+
+#btn-ultima-semana {
+    background-color: #f6c3d4;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+#btn-ultima-semana:hover {
+    background-color: #f6c3d4;
+}
+
+#btn-ultimo-mes {
+    background-color: #f6c3d4;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+#btn-ultimo-mes:hover {
+    background-color: #f6c3d4;
+}
