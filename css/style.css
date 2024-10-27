@@ -119,3 +119,8 @@ select {
     border: 2px solid #f6c3d4;
     border-radius: 10px;
 }
+.retroactive {
+    background-color: #ffe6f2;
+    color: #e07eaf;
+    font-weight: bold;
+}

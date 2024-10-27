@@ -1,270 +1,163 @@
 document.addEventListener("DOMContentLoaded", () => {
     const registrosContainer = document.getElementById("registros-container");
-    const registros = getRegisterLocalStorage();
+    let registros = getRegisterLocalStorage();
+    let registrosPorData = {};
 
-    // Agrupar registros por data
-    const registrosPorData = registros.reduce((acc, registro) => {
-        const data = registro.data.split("T")[0]; // Pega apenas a data sem o horário
-        if (!acc[data]) {
-            acc[data] = [];
-        }
-        acc[data].push(registro);
-        return acc;
-    }, {});
-
-    // Exibir registros agrupados por data
-    Object.keys(registrosPorData).forEach(data => {
-        const divData = document.createElement("div");
-        divData.classList.add("data-registro");
-        
-        const dataFormatada = data.split("-").reverse().join("/"); // Formatação para exibição
-        divData.innerHTML = `<h2>${dataFormatada}</h2>`;
-        
-        registrosPorData[data].forEach((registro, index) => {
-            const divRegistro = document.createElement("div");
-            divRegistro.classList.add("registro");
-
-            divRegistro.innerHTML = `
-                <p>${registro.hora} | Tipo: ${registro.tipo}</p>
-                <button class="btn-editar" data-data="${data}" data-index="${index}">Editar</button>
-                <button class="btn-excluir" data-index="${index}">Excluir</button>
-            `;
-
-            divData.appendChild(divRegistro);
-        });
-
-        registrosContainer.appendChild(divData);
-    });
-
-    const btnVoltar = document.getElementById("btn-voltar");
-    btnVoltar.addEventListener("click", () => {
-        window.location.href = "index.html";
-    });
-
-    // Lógica de edição
-    const btnEditar = document.querySelectorAll(".btn-editar");
-    btnEditar.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const data = e.target.dataset.data; // Obtém a data do botão
-            const index = e.target.dataset.index; // Obtém o índice dentro do grupo
-            const registro = registrosPorData[data][index]; // Obtém o registro correto
-
-            console.log("Registro para edição:", registro);
-
-            const dialog = document.createElement("dialog");
-            dialog.innerHTML = `
-                <p>Editar horário do ponto:</p>
-                <label>Data: <input type="date" id="data-input" value="${registro.data.split("T")[0]}"></label>
-                <label>Hora: <input type="time" id="hora-input" value="${registro.hora}"></label>
-                <button id="btn-confirmar-edicao">Confirmar</button>
-                <button id="btn-cancelar-edicao">Cancelar</button>
-            `;
-            document.body.appendChild(dialog);
-            dialog.showModal();
-
-            document.getElementById("btn-confirmar-edicao").addEventListener("click", () => {
-                const novaData = document.getElementById("data-input").value;
-                const novaHora = document.getElementById("hora-input").value;
-
-                if (novaData && novaHora) {
-                    registro.data = novaData;
-                    registro.hora = novaHora;
-
-                    console.log("Registro atualizado:", registro);
-
-                    // Salva o registro atualizado no localStorage
-                    localStorage.setItem("register", JSON.stringify(registros));
-                    
-                    // Atualiza a exibição na página
-                    window.location.reload();
-                }
-            });
-
-            document.getElementById("btn-cancelar-edicao").addEventListener("click", () => {
-                dialog.close();
-                document.body.removeChild(dialog);
-            });
-        });
-    });
-
-    const btnExcluir = document.querySelectorAll(".btn-excluir");
-    btnExcluir.forEach(btn => {
-        btn.addEventListener("click", () => {
-            alert("O ponto não pode ser excluído.");
-        });
-    });
-});
-
-function getRegisterLocalStorage() {
-    let registers = localStorage.getItem("register");
-    if (!registers) {
-        return [];
-    }
-    return JSON.parse(registers);
-}
-
-// CAROL AQUIO
-document.addEventListener("DOMContentLoaded", () => {
-    const registrosContainer = document.getElementById("registros-container");
-    const registros = getRegisterLocalStorage();
-    let registrosPorData = {}; 
-
+    // Função principal para exibir registros na tela
     function exibirRegistros(registrosParaExibir) {
         registrosContainer.innerHTML = ""; 
-
-
-        registrosPorData = registrosParaExibir.reduce((acc, registro) => {
-            const data = registro.data.split("T")[0]; 
-            if (!acc[data]) {
-                acc[data] = [];
-            }
-            acc[data].push(registro);
-            return acc;
-        }, {});
-
+        registrosPorData = agruparRegistrosPorData(registrosParaExibir);
     
         Object.keys(registrosPorData).forEach(data => {
             const divData = document.createElement("div");
             divData.classList.add("data-registro");
-
+    
             const dataFormatada = data.split("-").reverse().join("/"); 
             divData.innerHTML = `<h2>${dataFormatada}</h2>`;
-
+    
             registrosPorData[data].forEach((registro, index) => {
                 const divRegistro = document.createElement("div");
                 divRegistro.classList.add("registro");
 
+                // Adiciona a classe para marcar observações
+                if (registro.observacao) {
+                    divRegistro.classList.add("com-observacao"); // Adiciona uma classe diferenciada
+                }
+
                 divRegistro.innerHTML = `
                     <p>${registro.hora} | Tipo: ${registro.tipo}</p>
+                    ${registro.isRetroactive ? '<p><em>Registro marcado no passado</em></p>' : ""}
+                    ${registro.isEdited ? '<p><em>Registro Editado</em></p>' : ""}
+                    ${registro.observacao ? `<p><strong>Observação:</strong> ${registro.observacao}</p>` : ""}
                     <button class="btn-editar" data-data="${data}" data-index="${index}">Editar</button>
                     <button class="btn-excluir" data-index="${index}">Excluir</button>
                 `;
-
+                
                 divData.appendChild(divRegistro);
             });
-
+    
             registrosContainer.appendChild(divData);
         });
-
-       
+    
         configurarEdicaoEExclusao();
     }
 
-   
+    // Função para agrupar registros por data
+    function agruparRegistrosPorData(registrosParaAgrupar) {
+        return registrosParaAgrupar.reduce((acc, registro) => {
+            const data = registro.data.split("T")[0];
+            if (!acc[data]) acc[data] = [];
+            acc[data].push(registro);
+            return acc;
+        }, {});
+    }
+
+    // Configura lógica de edição e exclusão de registros
     function configurarEdicaoEExclusao() {
-        const btnEditar = document.querySelectorAll(".btn-editar");
-        btnEditar.forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                const data = e.target.dataset.data; 
-                const index = e.target.dataset.index; 
-                const registro = registrosPorData[data][index]; 
-
-                console.log("Registro para edição:", registro);
-
-                const dialog = document.createElement("dialog");
-                dialog.innerHTML = `
-                    <p>Editar horário do ponto:</p>
-                    <label>Data: <input type="date" id="data-input" value="${registro.data.split("T")[0]}"></label>
-                    <label>Hora: <input type="time" id="hora-input" value="${registro.hora}"></label>
-                    <button id="btn-confirmar-edicao">Confirmar</button>
-                    <button id="btn-cancelar-edicao">Cancelar</button>
-                `;
-                document.body.appendChild(dialog);
-                dialog.showModal();
-
-                document.getElementById("btn-confirmar-edicao").addEventListener("click", () => {
-                    const novaData = document.getElementById("data-input").value;
-                    const novaHora = document.getElementById("hora-input").value;
-
-                    if (novaData && novaHora) {
-                        registro.data = novaData;
-                        registro.hora = novaHora;
-
-                        console.log("Registro atualizado:", registro);
-
-                        
-                        localStorage.setItem("register", JSON.stringify(registros));
-
-                        
-                        window.location.reload();
-                    }
-                });
-
-                document.getElementById("btn-cancelar-edicao").addEventListener("click", () => {
-                    dialog.close();
-                    document.body.removeChild(dialog);
-                });
-            });
+        document.querySelectorAll(".btn-editar").forEach(btn => {
+            btn.addEventListener("click", editarRegistro);
         });
 
-        const btnExcluir = document.querySelectorAll(".btn-excluir");
-        btnExcluir.forEach(btn => {
+        document.querySelectorAll(".btn-excluir").forEach(btn => {
             btn.addEventListener("click", () => {
                 alert("O ponto não pode ser excluído.");
             });
         });
     }
 
-   
-    exibirRegistros(registros);
-
+    // Função para abrir o diálogo de edição de um registro
+    function editarRegistro(e) {
+        const data = e.target.dataset.data;
+        const index = e.target.dataset.index;
+        const registro = registrosPorData[data][index];
     
-    document.getElementById("btn-filtrar").addEventListener("click", () => {
-        const startDate = document.getElementById('start-date').value;
-        const endDate = document.getElementById('end-date').value;
+        const dialog = document.createElement("dialog");
+        dialog.innerHTML = `
+            <p>Editar horário do ponto:</p>
+            <label>Data: <input type="date" id="data-input" value="${registro.data.split("T")[0]}"></label>
+            <label>Hora: <input type="time" id="hora-input" value="${registro.hora}"></label>
+            <label>Observação: <input type="text" id="observacao-input" value="${registro.observacao || ''}"></label>
+            <button id="btn-confirmar-edicao">Confirmar</button>
+            <button id="btn-cancelar-edicao">Cancelar</button>
+        `;
+        document.body.appendChild(dialog);
+        dialog.showModal();
+    
+        document.getElementById("btn-confirmar-edicao").addEventListener("click", () => {
+            const novaData = document.getElementById("data-input").value;
+            const novaHora = document.getElementById("hora-input").value;
+            const novaObservacao = document.getElementById("observacao-input").value;
+    
+            if (novaData && novaHora) {
+                registro.data = novaData;
+                registro.hora = novaHora;
+                registro.observacao = novaObservacao; // Salva a observação
+                registro.isEdited = true; // Marcação de registro editado
+    
+                localStorage.setItem("register", JSON.stringify(registros));
+                window.location.reload();
+            }
+        });
+    
+        document.getElementById("btn-cancelar-edicao").addEventListener("click", () => {
+            dialog.close();
+            document.body.removeChild(dialog);
+        });
+    }
 
-        if (startDate && endDate) {
+    // Função para recuperar registros do localStorage
+    function getRegisterLocalStorage() {
+        let registers = localStorage.getItem("register");
+        return registers ? JSON.parse(registers) : [];
+    }
+
+    // Função para aplicar filtro por data
+    function aplicarFiltroPorData(dataInicio, dataFim) {
+        if (dataInicio && dataFim) {
             const registrosFiltrados = registros.filter(registro => {
-                const dataRegistro = registro.data.split("T")[0]; 
-                return dataRegistro >= startDate && dataRegistro <= endDate; 
+                const dataRegistro = registro.data.split("T")[0];
+                return dataRegistro >= dataInicio && dataRegistro <= dataFim;
             });
-
-            
             exibirRegistros(registrosFiltrados);
         } else {
-           
             exibirRegistros(registros);
         }
-    });
+    }
 
     document.getElementById("btn-ultima-semana").addEventListener("click", () => {
         const hoje = new Date();
         const ultimaSemana = new Date(hoje);
-        ultimaSemana.setDate(hoje.getDate() - 7); 
+        ultimaSemana.setDate(hoje.getDate() - 7);
 
         const registrosFiltrados = registros.filter(registro => {
-            const dataRegistro = new Date(registro.data.split("T")[0]); 
-            return dataRegistro >= ultimaSemana && dataRegistro <= hoje; 
+            const dataRegistro = new Date(registro.data.split("T")[0]);
+            return dataRegistro >= ultimaSemana && dataRegistro <= hoje;
         });
-
-        
         exibirRegistros(registrosFiltrados);
     });
 
     document.getElementById("btn-ultimo-mes").addEventListener("click", () => {
         const hoje = new Date();
         const ultimoMes = new Date(hoje);
-        ultimoMes.setMonth(hoje.getMonth() - 1); 
+        ultimoMes.setMonth(hoje.getMonth() - 1);
 
         const registrosFiltrados = registros.filter(registro => {
-            const dataRegistro = new Date(registro.data.split("T")[0]); 
-            return dataRegistro >= ultimoMes && dataRegistro <= hoje; 
+            const dataRegistro = new Date(registro.data.split("T")[0]);
+            return dataRegistro >= ultimoMes && dataRegistro <= hoje;
         });
-
-      
         exibirRegistros(registrosFiltrados);
     });
 
-    const btnVoltar = document.getElementById("btn-voltar");
-    btnVoltar.addEventListener("click", () => {
+    document.getElementById("btn-filtrar").addEventListener("click", () => {
+        const dataInicio = document.getElementById('start-date').value;
+        const dataFim = document.getElementById('end-date').value;
+        aplicarFiltroPorData(dataInicio, dataFim);
+    });
+
+    document.getElementById("btn-voltar").addEventListener("click", () => {
         window.location.href = "index.html";
     });
-});
 
-function getRegisterLocalStorage() {
-    let registers = localStorage.getItem("register");
-    if (!registers) {
-        return [];
-    }
-    return JSON.parse(registers);
-}
+    // Exibe os registros iniciais
+    exibirRegistros(registros);
+});

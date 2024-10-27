@@ -54,6 +54,7 @@ btnDialogBaterPonto.addEventListener("click", () => {
         return;
     }
 
+    let isRetroactive = new Date(selectedDate + "T00:00:00") < new Date(currentDate + "T00:00:00");
     let pontoHora = document.getElementById("hora-input").value;
 
     let ponto = {
@@ -61,7 +62,8 @@ btnDialogBaterPonto.addEventListener("click", () => {
         "hora": pontoHora,
         "localizacao": getCurrentPosition(),
         "id": Date.now(),
-        "tipo": typeRegister
+        "tipo": typeRegister,
+        "isRetroactive": isRetroactive
     };
 
     saveRegisterLocalStorage(ponto);
@@ -78,6 +80,7 @@ btnDialogBaterPonto.addEventListener("click", () => {
         divAlertaRegistroPonto.classList.add("hidden");
     }, 3000);
 });
+
 
 function saveRegisterLocalStorage(register) {
     // Lê os registros existentes do localStorage
