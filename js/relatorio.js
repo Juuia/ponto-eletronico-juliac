@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let registros = getRegisterLocalStorage();
     let registrosPorData = {};
 
-    // Função principal para exibir registros na tela
     function exibirRegistros(registrosParaExibir) {
         registrosContainer.innerHTML = ""; 
         registrosPorData = agruparRegistrosPorData(registrosParaExibir);
@@ -18,21 +17,21 @@ document.addEventListener("DOMContentLoaded", () => {
             registrosPorData[data].forEach((registro, index) => {
                 const divRegistro = document.createElement("div");
                 divRegistro.classList.add("registro");
-
-                // Adiciona a classe para marcar observações
+    
                 if (registro.observacao) {
                     divRegistro.classList.add("com-observacao"); // Adiciona uma classe diferenciada
                 }
-
+    
                 divRegistro.innerHTML = `
                     <p>${registro.hora} | Tipo: ${registro.tipo}</p>
                     ${registro.isRetroactive ? '<p><em>Registro marcado no passado</em></p>' : ""}
                     ${registro.isEdited ? '<p><em>Registro Editado</em></p>' : ""}
                     ${registro.observacao ? `<p><strong>Observação:</strong> ${registro.observacao}</p>` : ""}
+                    ${registro.mensagem ? `<p><strong>Justificativa:</strong> ${registro.mensagem}</p>` : ""} <!-- Adicionando Justificativa -->
                     <button class="btn-editar" data-data="${data}" data-index="${index}">Editar</button>
                     <button class="btn-excluir" data-index="${index}">Excluir</button>
                 `;
-                
+    
                 divData.appendChild(divRegistro);
             });
     
@@ -41,8 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         configurarEdicaoEExclusao();
     }
-
-    // Função para agrupar registros por data
+    
     function agruparRegistrosPorData(registrosParaAgrupar) {
         return registrosParaAgrupar.reduce((acc, registro) => {
             const data = registro.data.split("T")[0];
@@ -52,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, {});
     }
 
-    // Configura lógica de edição e exclusão de registros
     function configurarEdicaoEExclusao() {
         document.querySelectorAll(".btn-editar").forEach(btn => {
             btn.addEventListener("click", editarRegistro);
@@ -65,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Função para abrir o diálogo de edição de um registro
     function editarRegistro(e) {
         const data = e.target.dataset.data;
         const index = e.target.dataset.index;
@@ -77,6 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <label>Data: <input type="date" id="data-input" value="${registro.data.split("T")[0]}"></label>
             <label>Hora: <input type="time" id="hora-input" value="${registro.hora}"></label>
             <label>Observação: <input type="text" id="observacao-input" value="${registro.observacao || ''}"></label>
+            <label>Mensagem: <input type="text" id="mensagem-input" value="${registro.mensagem || ''}"></label>
+            <p>${registro.arquivo ? `Arquivo anexado: ${registro.arquivo}` : "Nenhum arquivo anexado."}</p>
             <button id="btn-confirmar-edicao">Confirmar</button>
             <button id="btn-cancelar-edicao">Cancelar</button>
         `;
@@ -87,11 +85,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const novaData = document.getElementById("data-input").value;
             const novaHora = document.getElementById("hora-input").value;
             const novaObservacao = document.getElementById("observacao-input").value;
+            const novaMensagem = document.getElementById("mensagem-input").value; // Nova mensagem
     
             if (novaData && novaHora) {
                 registro.data = novaData;
                 registro.hora = novaHora;
                 registro.observacao = novaObservacao; // Salva a observação
+                registro.mensagem = novaMensagem; // Salva a nova mensagem
                 registro.isEdited = true; // Marcação de registro editado
     
                 localStorage.setItem("register", JSON.stringify(registros));
@@ -104,14 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.removeChild(dialog);
         });
     }
-
-    // Função para recuperar registros do localStorage
+    
     function getRegisterLocalStorage() {
         let registers = localStorage.getItem("register");
         return registers ? JSON.parse(registers) : [];
     }
 
-    // Função para aplicar filtro por data
     function aplicarFiltroPorData(dataInicio, dataFim) {
         if (dataInicio && dataFim) {
             const registrosFiltrados = registros.filter(registro => {
@@ -158,6 +156,5 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "index.html";
     });
 
-    // Exibe os registros iniciais
     exibirRegistros(registros);
 });

@@ -56,6 +56,8 @@ btnDialogBaterPonto.addEventListener("click", () => {
 
     let isRetroactive = new Date(selectedDate + "T00:00:00") < new Date(currentDate + "T00:00:00");
     let pontoHora = document.getElementById("hora-input").value;
+    let pontoMensagem = document.getElementById("mensagem-input").value;
+    let pontoArquivo = document.getElementById("arquivo-input").files[0] ? document.getElementById("arquivo-input").files[0].name : '';
 
     let ponto = {
         "data": selectedDate,
@@ -63,7 +65,9 @@ btnDialogBaterPonto.addEventListener("click", () => {
         "localizacao": getCurrentPosition(),
         "id": Date.now(),
         "tipo": typeRegister,
-        "isRetroactive": isRetroactive
+        "isRetroactive": isRetroactive,
+        "mensagem": pontoMensagem,
+        "arquivo": pontoArquivo
     };
 
     saveRegisterLocalStorage(ponto);
@@ -81,15 +85,9 @@ btnDialogBaterPonto.addEventListener("click", () => {
     }, 3000);
 });
 
-
 function saveRegisterLocalStorage(register) {
-    // Lê os registros existentes do localStorage
-    registerLocalStorage = getRegisterLocalStorage(); // Atualiza a lista de registros
-
-    // Adiciona o novo registro à lista existente
+    registerLocalStorage = getRegisterLocalStorage();
     registerLocalStorage.push(register);
-
-    // Salva a lista atualizada no localStorage
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
 }
 
@@ -117,7 +115,7 @@ function getCurrentHour() {
 
 function getCurrentDate() {
     const date = new Date();
-    return date.toLocaleDateString('pt-BR'); 
+    return date.toLocaleDateString('pt-BR');
 }
 
 function getCurrentDateFormatted() {
