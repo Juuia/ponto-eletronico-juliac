@@ -30,14 +30,20 @@
         <p id="dialog-hora"></p>
         <input type="date" id="calendar">
         <div id="hora-container"></div>
-        <select name="tipos-ponto" id="tipos-ponto">
-            <option value="entrada">Entrada</option>
-            <option value="intervalo">Intervalo</option>
-            <option value="volta-intervalo">Volta Intervalo</option>
-            <option value="saida">Saída</option>
-        </select>
-        <label for="mensagem-input">Mensagem:</label>
-        <input type="text" id="mensagem-input" placeholder="Insira uma mensagem opcional">
+        <div class="input-group">
+            <label for="tipos-ponto">Tipo de Ponto:</label>
+            <select name="tipos-ponto" id="tipos-ponto">
+                <option value="entrada">Entrada</option>
+                <option value="intervalo">Intervalo</option>
+                <option value="volta-intervalo">Volta Intervalo</option>
+                <option value="saida">Saída</option>
+            </select>
+        </div>
+    
+        <div class="input-group">
+            <label for="mensagem-input">Mensagem:</label>
+            <input type="text" id="mensagem-input" placeholder="Insira uma mensagem opcional">
+        </div>
         <label for="arquivo-input">Arquivo:</label>
         <input type="file" id="arquivo-input">
         <button id="btn-dialog-bater-ponto">Registrar ponto</button>

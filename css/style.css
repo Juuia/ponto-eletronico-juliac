@@ -42,7 +42,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-#calendar, #hora-input {
+#calendar, #hora-input, #data-input, #observacao-input {
  font-size: 15px;
  border: 2px solid #e6b0c7;
  border-radius: 5px;
@@ -74,7 +74,7 @@ body {
     border-bottom: 2px solid #f28e9b;
 }
 
-#dialog-ponto {
+#dialog-ponto, {
     font-size: 18px;
     border: 2px solid #f28e9b;
     border-radius: 10px;
@@ -118,85 +118,116 @@ select {
     padding: 10px;
     border: 2px solid #f6c3d4;
     border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
 }
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.input-group label {
+    font-size: 15px;
+    color: #c96698;
+    margin-bottom: 5px;
+}
+
+#tipos-ponto, #mensagem-input, #calendar, #arquivo-input {
+    font-size: 15px;
+    padding: 8px;
+    margin-top: 5px;
+    border: 2px solid #f6c3d4;
+    border-radius: 10px;
+    background-color: #fff;
+    font-family: 'Montserrat', sans-serif;
+}
+
 .retroactive {
     background-color: #ffe6f2;
     color: #e07eaf;
     font-weight: bold;
 }
 
-#arquivo-input {
-    background-color: #f6c3d4;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
 #arquivo-input:hover {
     background-color: #ffe6f2;
 }
 
 #btn-confirmar-edicao {
-    background-color: #e07eaf;
+    background-color: #f28e9b;
     color: white;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    font-family: 'Montserrat', sans-serif;
 }
 #btn-confirmar-edicao:hover {
     background-color: #e07eaf;
 }
 
 #btn-cancelar-edicao {
-    background-color: #e07eaf;
+    background-color: #f28e9b;
     color: white;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 #btn-cancelar-edicao:hover {
     background-color: #f6c3d4;
 }
 
 #btn-filtrar {
-    background-color: #f6c3d4;
+    background-color: #e8b1c3;
     color: white;
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 5px;
+    margin: 13px;
+    font-family: 'Montserrat', sans-serif;
 }
 #btn-filtrar:hover {
     background-color: #f6c3d4;
 }
 
 #btn-ultima-semana {
-    background-color: #f6c3d4;
+    background-color: #e8b1c3;
     color: white;
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 5px;
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
 }
 #btn-ultima-semana:hover {
     background-color: #f6c3d4;
 }
 
 #btn-ultimo-mes {
-    background-color: #f6c3d4;
+    background-color: #e8b1c3;
     color: white;
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 5px;
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
 }
 #btn-ultimo-mes:hover {
     background-color: #f6c3d4;
+}
+
+.editar-horario {
+    color: #c96698; /* Substitua pela cor que desejar */
+    font-size: 20px; /* Ajuste o tamanho conforme necessário */
+    font-weight: bold; /* Opcional: deixa o texto em negrito */
 }

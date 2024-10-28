@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         const dialog = document.createElement("dialog");
         dialog.innerHTML = `
-            <p>Editar horário do ponto:</p>
+            <p class="editar-horario">Editar horário do ponto:</p>
             <label>Data: <input type="date" id="data-input" value="${registro.data.split("T")[0]}"></label>
             <label>Hora: <input type="time" id="hora-input" value="${registro.hora}"></label>
             <label>Observação: <input type="text" id="observacao-input" value="${registro.observacao || ''}"></label>
